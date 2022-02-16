@@ -21,4 +21,50 @@ export class UsersService {
     //save that user entity into DB
     return this.repo.save(user);
   }
+
+  //Method to GET one user
+  findOne(id: number) {
+    //use repo to query
+    return this.repo.findOne(id);
+  }
+
+  //Method to GET all users
+  find(email: string) {
+    //use repo to query
+    //pass obj with email as quert criteria
+    return this.repo.find({ email });
+  }
+
+  //Method to UPDATE/PATCH a user
+  async update(id: number, attrs: Partial<User>) {
+    //Use our own method to find the record we want
+    //to update
+    const user = await this.findOne(id);
+
+    //Throw Error if we haven't found it
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    //If we found it, assign changes to the obj
+    Object.assign(user, attrs);
+
+    //Save the update to the DB
+    return this.repo.save(user);
+  }
+
+  //Method to DELETE a user
+  async remove(id: number) {
+    //Use our own method to find the record we want
+    //to delete
+    const user = await this.findOne(id);
+
+    //Throw Error if we haven't found it
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    //Remove from DB passing user entity
+    return this.repo.remove(user);
+  }
 }
