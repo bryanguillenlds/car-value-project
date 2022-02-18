@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
@@ -43,7 +43,7 @@ export class UsersService {
 
     //Throw Error if we haven't found it
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundException('User not found');
     }
 
     //If we found it, assign changes to the obj
@@ -61,7 +61,7 @@ export class UsersService {
 
     //Throw Error if we haven't found it
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundException('User not found');
     }
 
     //Remove from DB passing user entity
