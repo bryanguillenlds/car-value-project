@@ -9,9 +9,11 @@ import {
   Delete,
   Patch,
   NotFoundException,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
+import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
 
 @Controller('auth') //auth route prefix
 export class UsersController {
@@ -28,6 +30,8 @@ export class UsersController {
 
   //GET Decorator for one record
   //Use param decorator to extract the wild card
+  //UseInterceptors decorator to intercept the response from this endpoint
+  @UseInterceptors(SerializeInterceptor)
   @Get('/:id')
   async findUser(@Param('id') id: string) {
     //Use service to find a specific user
