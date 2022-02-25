@@ -1,3 +1,4 @@
+import { AuthService } from './auth.service';
 import { UserDto } from './dtos/user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import {
@@ -21,15 +22,18 @@ import { Serialize } from 'src/interceptors/serialize.interceptor';
 @Serialize(UserDto)
 @Controller('auth') //auth route prefix
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private authService: AuthService,
+  ) {}
 
   //POST Decorator
   //Using body decorator to extract body from request
   //Using DTO for validation
   @Post('/signup')
   createUser(@Body() body: CreateUserDto) {
-    //use service to create a user
-    this.usersService.create(body.email, body.password);
+    //use auth service to create a user
+    return this.authService.signup(body.email, body.password);
   }
 
   //GET Decorator for one record
