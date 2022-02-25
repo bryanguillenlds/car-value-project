@@ -30,10 +30,20 @@ export class UsersController {
   //POST Decorator
   //Using body decorator to extract body from request
   //Using DTO for validation
+  //Using auth service to sign up
   @Post('/signup')
   createUser(@Body() body: CreateUserDto) {
     //use auth service to create a user
     return this.authService.signup(body.email, body.password);
+  }
+
+  //POST decorator
+  //Using body decorator to extract body from request
+  //Using DTO for validation
+  //Using auth service to sign in
+  @Post('/signin')
+  signin(@Body() body: CreateUserDto) {
+    return this.authService.signin(body.email, body.password);
   }
 
   //GET Decorator for one record
