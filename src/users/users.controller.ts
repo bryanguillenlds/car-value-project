@@ -12,6 +12,7 @@ import {
   Patch,
   NotFoundException,
   UseInterceptors,
+  Session,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
@@ -27,14 +28,34 @@ export class UsersController {
     private authService: AuthService,
   ) {}
 
+  //GET Decorator
+  //Endpoint to check who is the current user
+  @Get('/whoami')
+  whoAmI(@Session() session: any) {
+    return this.usersService.findOne(session.userId);
+  }
+
+  //POST Decorator
+  //endpoint to signout user
+  @Post('/signout')
+  signout(@Session() session: any) {
+    //set it to null
+    session.userId = null;
+  }
+
   //POST Decorator
   //Using body decorator to extract body from request
   //Using DTO for validation
   //Using auth service to sign up
+  //Using Session decorator to get data from session
   @Post('/signup')
-  createUser(@Body() body: CreateUserDto) {
-    //use auth service to create a user
-    return this.authService.signup(body.email, body.password);
+  async createUser(@Body() body: CreateUserDto, @Session() session: any) {
+    //use auth service to create a user and store the response
+    const user = await this.authService.signup(body.email, body.password);
+    //assing the id of the user to the session
+    session.userId = user.id;
+
+    return user;
   }
 
   //POST decorator
@@ -42,8 +63,14 @@ export class UsersController {
   //Using DTO for validation
   //Using auth service to sign in
   @Post('/signin')
-  signin(@Body() body: CreateUserDto) {
-    return this.authService.signin(body.email, body.password);
+  //Using Session decorator to get data from session
+  async signin(@Body() body: CreateUserDto, @Session() session: any) {
+    //use auth service to create a user and store the response
+    const user = await this.authService.signin(body.email, body.password);
+    //assing the id of the user to the session
+    session.userId = user.id;
+
+    return user;
   }
 
   //GET Decorator for one record

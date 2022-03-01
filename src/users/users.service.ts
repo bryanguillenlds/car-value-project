@@ -24,6 +24,8 @@ export class UsersService {
 
   //Method to GET one user
   findOne(id: number) {
+    //if no id (for example if session.userId is null) return null
+    if (!id) return null;
     //use repo to query
     return this.repo.findOne(id);
   }
