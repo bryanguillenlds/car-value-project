@@ -7,7 +7,6 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { plainToInstance } from 'class-transformer';
-import { handleRetry } from '@nestjs/typeorm';
 
 //making our own type safety interface
 //so that Serialize only accepts Classes
@@ -15,7 +14,7 @@ interface ClassConstructor {
   new (...args: any[]): {};
 }
 
-//define custom decortor function
+//define custom decorator function
 export function Serialize(dto: ClassConstructor) {
   return UseInterceptors(new SerializeInterceptor(dto));
 }
