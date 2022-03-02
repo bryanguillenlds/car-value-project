@@ -1,3 +1,6 @@
+import { User } from './user.entity';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { CurrentUser } from './decorators/current-user.decorator';
 import { AuthService } from './auth.service';
 import { UserDto } from './dtos/user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
@@ -11,7 +14,6 @@ import {
   Delete,
   Patch,
   NotFoundException,
-  UseInterceptors,
   Session,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -30,9 +32,14 @@ export class UsersController {
 
   //GET Decorator
   //Endpoint to check who is the current user
+  // @Get('/whoami')
+  // whoAmI(@Session() session: any) {
+  //   return this.usersService.findOne(session.userId);
+  // }
+
   @Get('/whoami')
-  whoAmI(@Session() session: any) {
-    return this.usersService.findOne(session.userId);
+  whoAmI(@CurrentUser() user: User) {
+    return user;
   }
 
   //POST Decorator
