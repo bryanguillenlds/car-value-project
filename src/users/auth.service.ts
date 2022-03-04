@@ -12,7 +12,7 @@ const scrypt = promisify(_scrypt);
 
 @Injectable()
 export class AuthService {
-  //constructor passing user service
+  //constructor passing user service dependency
   constructor(private usersService: UsersService) {}
 
   //Method for registering a user
