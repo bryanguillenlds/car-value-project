@@ -35,7 +35,7 @@ const cookieSession = require('cookie-session');
 })
 export class AppModule {
   //configure a global middleware
-  //this will be automatically called when listening for incoming reqs
+  //this will be automatically called when listening for incoming requests
   configure(consumer: MiddlewareConsumer) {
     //apply the middleware for cookie-session
     consumer
