@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from './../users/user.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Report {
@@ -25,4 +26,9 @@ export class Report {
 
   @Column()
   mileage: number;
+
+  //Decorator so that ReportS can have only ONE User
+  //This will add a column to DB to relate to a user id
+  @ManyToOne(() => User, (user) => user.reports)
+  user: User;
 }
