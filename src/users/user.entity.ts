@@ -20,6 +20,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column({ default: true })
+  admin: boolean;
+
   //Decorator so that One User can have many Reports
   //This will NOT add a column to DB
   @OneToMany(() => Report, (report) => report.user)
