@@ -1,6 +1,19 @@
+import { User } from './../user.entity';
 import { UsersService } from './../users.service';
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
+
+declare global {
+  //find express
+  namespace Express {
+    //grab the req
+    interface Request {
+      //tell it that it will have a currentUser prop
+      //that has a type of User entity
+      currentUser?: User;
+    }
+  }
+}
 
 //Make class injectable so that we can inject our user service
 @Injectable()
@@ -17,7 +30,7 @@ export class CurrentUserMiddleware implements NestMiddleware {
     if (userId) {
       //find that user
       const user = await this.usersService.findOne(userId);
-      //@ts-ignore
+
       //assign it to the currentUser on the req.
       req.currentUser = user;
     }
