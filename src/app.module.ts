@@ -17,19 +17,7 @@ const cookieSession = require('cookie-session');
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
-    //Inject env config into typeORM
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      //use the injected config to set up DB
-      useFactory: (config: ConfigService) => {
-        return {
-          type: 'sqlite',
-          database: config.get<string>('DB_NAME'),
-          synchronize: true,
-          entities: [User, Report],
-        };
-      },
-    }),
+    TypeOrmModule.forRoot(), //typeorm will look for config on root of project
     UsersModule,
     ReportsModule,
   ],
@@ -47,6 +35,9 @@ const cookieSession = require('cookie-session');
   ],
 })
 export class AppModule {
+  //Use dependency inj to inject the config service and
+  //have access
+  constructor(private configService: ConfigService) {}
   //configure a global middleware
   //this will be automatically called when listening for incoming requests
   configure(consumer: MiddlewareConsumer) {
@@ -54,7 +45,8 @@ export class AppModule {
     consumer
       .apply(
         cookieSession({
-          keys: ['asdf'],
+          //access the env var using the config service
+          keys: [this.configService.get('COOKIE_KEY')],
         }),
       )
       .forRoutes('*'); //chain forRoutes(*) to apply this middleware to all routes
