@@ -30,6 +30,15 @@ switch(process.env.NODE_ENV) {
 			migrationsRun: true
 		});
 	case 'production':
+		Object.assign(dbConfig, {
+			type: 'postgres', //different db for deployment
+			url: process.env.DATABASE_URL, //generated credentials by heroku
+			migrationsRun: true,
+			entities: ['**/*.entity.js'],
+			ssl: {
+				rejectUnauthorized: false
+			}
+		});
 		break;
 	default:
 		throw new Error('Unknown Environment')
